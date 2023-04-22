@@ -9,8 +9,8 @@ unzip -o awscliv2.zip
 sudo ./aws/install
 aws --version
 echo ".........................................aws configure......................................................"
-read -p "AWS Access Key ID: " aws_access_key
-read -p "AWS Secret Access Key: " aws_secret_access_key
+read -p 'AWS Access Key ID: ' aws_access_key
+read -p 'AWS Secret Access Key: ' aws_secret_access_key
 export AWS_ACCESS_KEY_ID=$aws_access_key
 export AWS_SECRET_ACCESS_KEY=$aws_secret_access_key
 export AWS_DEFAULT_REGION=eu-central-1
@@ -24,8 +24,8 @@ mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/
 echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc
 kubectl version --short --client
 echo ".........................................updating kubeconfig............................................................"
-read -e -p "Enter aws region name" -i "eu-central-1" aws_region 
-read -e -p "Enter cluster name" -i "SE-EDI-DEV-EKS-CLUSTER" eks_cluster
+read -e -p 'Enter aws region name: ' -i "eu-central-1" aws_region 
+read -e -p 'Enter cluster name: ' -i "SE-EDI-DEV-EKS-CLUSTER" eks_cluster
 aws eks describe-cluster --region $aws_region --name $eks_cluster --query "cluster.status"
 aws eks update-kubeconfig --region $aws_region --name $eks_cluster
 kubectl get all -A
