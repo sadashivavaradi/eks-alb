@@ -5,11 +5,15 @@ echo ".......................installing curl and unzip..........................
 sudo yum install curl -y && sudo yum install unzip -y
 echo ".......................installing aws cli............................................................"
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-unzip awscliv2.zip
+unzip -o awscliv2.zip
 sudo ./aws/install
 aws --version
 echo ".........................................aws configure......................................................"
-aws configure
+read -p "AWS Access Key ID: " aws_access_key
+read -p "AWS Secret Access Key: " aws_secret_access_key
+export AWS_ACCESS_KEY_ID=$aws_access_key
+export AWS_SECRET_ACCESS_KEY=$aws_secret_access_key
+export AWS_DEFAULT_REGION=eu-central-1
 echo ".........................................installing kubectl............................................................"
 curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.26.2/2023-03-17/bin/linux/amd64/kubectl
 curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.26.2/2023-03-17/bin/linux/amd64/kubectl.sha256
