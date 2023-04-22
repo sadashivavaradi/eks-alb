@@ -30,3 +30,52 @@ read -e -p 'Enter cluster name: ' -i "SE-EDI-DEV-EKS-CLUSTER" eks_cluster
 aws eks describe-cluster --region $aws_region --name $eks_cluster --query "cluster.status"
 aws eks update-kubeconfig --region $aws_region --name $eks_cluster
 kubectl get all -A
+
+curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.4.7/docs/install/iam_policy.json
+aws iam create-policy \
+    --policy-name AWSLoadBalancerControllerIAMPolicy \
+    --policy-document file://iam_policy.json
+echo "..................................install eksctl..........................................................."
+ARCH=amd64
+PLATFORM=$(uname -s)_$ARCH
+
+curl -sLO "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$PLATFORM.tar.gz"
+
+# (Optional) Verify checksum
+curl -sL "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_checksums.txt" | grep $PLATFORM | sha256sum --check
+
+tar -xzf eksctl_$PLATFORM.tar.gz -C /tmp && rm eksctl_$PLATFORM.tar.gz
+
+sudo mv /tmp/eksctl /usr/local/bin
+
+echo ".........................................installing helm......................................."
+wget "https://get.helm.sh/helm-v3.6.1-linux-amd64.tar.gz"
+tar -cvzf helm-v3.6.1-linux-amd64.tar.gz
+sudo mv linux-amd64/helm /usr/local/bin/helm
+
+echo "..............................................creating oidc connector.........................................."
+eksctl utils associate-iam-oidc-provider --region=$aws_region --cluster=$eks_cluster --approve
+echo "..............................................creating service account.........................................."
+
+eksctl create iamserviceaccount \
+  --cluster=$eks_cluster \
+  --namespace=kube-system \
+  --name=aws-load-balancer-controller \
+  --role-name AmazonEKSLoadBalancerControllerRole \
+  --attach-policy-arn=arn:aws:iam::402444943075:policy/AWSLoadBalancerControllerIAMPolicy \
+  --approve
+
+echo "..............................................helm repo add.........................................."
+helm repo add eks https://aws.github.io/eks-charts
+helm repo update
+
+echo "..............................................creating load balancer controller.........................................."
+helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+  -n kube-system \
+  --set clusterName=$eks_cluster \
+  --set serviceAccount.create=false \
+  --set serviceAccount.name=aws-load-balancer-controller 
+kubectl get deployment -n kube-system aws-load-balancer-controller
+
+ 
+
