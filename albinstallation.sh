@@ -14,6 +14,7 @@ read -p 'AWS Secret Access Key: ' aws_secret_access_key
 export AWS_ACCESS_KEY_ID=$aws_access_key
 export AWS_SECRET_ACCESS_KEY=$aws_secret_access_key
 export AWS_DEFAULT_REGION=eu-central-1
+export AWS_DEFAULT_OUTPUT="json"
 echo ".........................................installing kubectl............................................................"
 curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.26.2/2023-03-17/bin/linux/amd64/kubectl
 curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.26.2/2023-03-17/bin/linux/amd64/kubectl.sha256
