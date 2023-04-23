@@ -1,4 +1,5 @@
-*
+/*
 !.gitignore
 !albinstallation.sh
 !README.md
+!cleanup.sh

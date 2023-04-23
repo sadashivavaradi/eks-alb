@@ -45,7 +45,7 @@ tar -xzf eksctl_$PLATFORM.tar.gz -C /tmp && rm eksctl_$PLATFORM.tar.gz
 sudo mv /tmp/eksctl /usr/local/bin
 
 echo ".........................................installing helm......................................."
-if [ ! -f helm-v3.6.1-linux-amd64.tar.gz];then
+if [ ! -f helm-v3.6.1-linux-amd64.tar.gz ];then
     wget "https://get.helm.sh/helm-v3.6.1-linux-amd64.tar.gz"
     tar -xvzf helm-v3.6.1-linux-amd64.tar.gz
     sudo mv linux-amd64/helm /usr/local/bin/helm
