@@ -9,6 +9,8 @@ if [ ! -f awscliv2.zip ];then
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip -o awscliv2.zip
 sudo ./aws/install
+else 
+    echo "aws cli already installed "
 fi
 
 aws --version
@@ -53,6 +55,9 @@ if [ ! -f helm-v3.6.1-linux-amd64.tar.gz ];then
     wget "https://get.helm.sh/helm-v3.6.1-linux-amd64.tar.gz"
     tar -xvzf helm-v3.6.1-linux-amd64.tar.gz
     sudo mv linux-amd64/helm /usr/local/bin/helm
+else 
+    echo "helm already installed "
+
 fi
 
 echo "..............................................creating service account.........................................."
