@@ -4,9 +4,13 @@ sudo yum update
 echo ".......................installing curl and unzip............................................................"
 sudo yum install curl -y && sudo yum install unzip -y
 echo ".......................installing aws cli............................................................"
+
+if [ ! -f awscliv2.zip ];then
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip -o awscliv2.zip
 sudo ./aws/install
+fi
+
 aws --version
 echo ".........................................aws configure......................................................"
 read -p 'AWS Access Key ID: ' aws_access_key
@@ -71,7 +75,7 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
   --set clusterName=$eks_cluster \
   --set serviceAccount.create=false \
   --set serviceAccount.name=aws-load-balancer-controller \
-  –-set image.repository=602401143452.dkr.ecr.eu-central-1.amazonaws.com/amazon/aws-load-balancer-controller
+  --set image.repository=602401143452.dkr.ecr.eu-central-1.amazonaws.com/amazon/aws-load-balancer-controller
 kubectl get deployment -n kube-system aws-load-balancer-controller
 
  
