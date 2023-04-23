@@ -31,10 +31,6 @@ aws eks describe-cluster --region $aws_region --name $eks_cluster --query "clust
 aws eks update-kubeconfig --region $aws_region --name $eks_cluster
 kubectl get all -A
 
-#curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.4.7/docs/install/iam_policy.json
-#aws iam create-policy \
-#    --policy-name AWSLoadBalancerControllerIAMPolicy \
-#    --policy-document file://iam_policy.json
 echo "..................................install eksctl..........................................................."
 ARCH=amd64
 PLATFORM=$(uname -s)_$ARCH
@@ -49,12 +45,12 @@ tar -xzf eksctl_$PLATFORM.tar.gz -C /tmp && rm eksctl_$PLATFORM.tar.gz
 sudo mv /tmp/eksctl /usr/local/bin
 
 echo ".........................................installing helm......................................."
-wget "https://get.helm.sh/helm-v3.6.1-linux-amd64.tar.gz"
-tar -xvzf helm-v3.6.1-linux-amd64.tar.gz
-sudo mv linux-amd64/helm /usr/local/bin/helm
+if [ ! -f helm-v3.6.1-linux-amd64.tar.gz];then
+    wget "https://get.helm.sh/helm-v3.6.1-linux-amd64.tar.gz"
+    tar -xvzf helm-v3.6.1-linux-amd64.tar.gz
+    sudo mv linux-amd64/helm /usr/local/bin/helm
+fi
 
-#echo "..............................................creating oidc connector.........................................."
-#eksctl utils associate-iam-oidc-provider --region=$aws_region --cluster=$eks_cluster --approve
 echo "..............................................creating service account.........................................."
 
 eksctl create iamserviceaccount \
@@ -74,7 +70,8 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
   -n kube-system \
   --set clusterName=$eks_cluster \
   --set serviceAccount.create=false \
-  --set serviceAccount.name=aws-load-balancer-controller 
+  --set serviceAccount.name=aws-load-balancer-controller \
+  –-set image.repository=602401143452.dkr.ecr.eu-central-1.amazonaws.com/amazon/aws-load-balancer-controller
 kubectl get deployment -n kube-system aws-load-balancer-controller
 
  
