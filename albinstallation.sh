@@ -31,10 +31,10 @@ aws eks describe-cluster --region $aws_region --name $eks_cluster --query "clust
 aws eks update-kubeconfig --region $aws_region --name $eks_cluster
 kubectl get all -A
 
-curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.4.7/docs/install/iam_policy.json
-aws iam create-policy \
-    --policy-name AWSLoadBalancerControllerIAMPolicy \
-    --policy-document file://iam_policy.json
+#curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.4.7/docs/install/iam_policy.json
+#aws iam create-policy \
+#    --policy-name AWSLoadBalancerControllerIAMPolicy \
+#    --policy-document file://iam_policy.json
 echo "..................................install eksctl..........................................................."
 ARCH=amd64
 PLATFORM=$(uname -s)_$ARCH
@@ -53,8 +53,8 @@ wget "https://get.helm.sh/helm-v3.6.1-linux-amd64.tar.gz"
 tar -xvzf helm-v3.6.1-linux-amd64.tar.gz
 sudo mv linux-amd64/helm /usr/local/bin/helm
 
-echo "..............................................creating oidc connector.........................................."
-eksctl utils associate-iam-oidc-provider --region=$aws_region --cluster=$eks_cluster --approve
+#echo "..............................................creating oidc connector.........................................."
+#eksctl utils associate-iam-oidc-provider --region=$aws_region --cluster=$eks_cluster --approve
 echo "..............................................creating service account.........................................."
 
 eksctl create iamserviceaccount \
