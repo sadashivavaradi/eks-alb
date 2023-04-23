@@ -50,7 +50,7 @@ sudo mv /tmp/eksctl /usr/local/bin
 
 echo ".........................................installing helm......................................."
 wget "https://get.helm.sh/helm-v3.6.1-linux-amd64.tar.gz"
-tar -cvzf helm-v3.6.1-linux-amd64.tar.gz
+tar -xvzf helm-v3.6.1-linux-amd64.tar.gz
 sudo mv linux-amd64/helm /usr/local/bin/helm
 
 echo "..............................................creating oidc connector.........................................."
