@@ -75,11 +75,16 @@ helm repo add eks https://aws.github.io/eks-charts
 helm repo update
 
 echo "..............................................creating load balancer controller.........................................."
-helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+helm upgrade aws-load-balancer-controller eks/aws-load-balancer-controller \
   -n kube-system \
   --set clusterName=$eks_cluster \
   --set serviceAccount.create=false \
   --set serviceAccount.name=aws-load-balancer-controller \
+  --set region=eu-central-1 \
+  --set vpcId=vpc-0ac25b7f9d6549798 \
+  --set enableShield=false \
+  --set enableWaf=false \
+  --set enableWafv2=false \
   --set image.repository=602401143452.dkr.ecr.eu-central-1.amazonaws.com/amazon/aws-load-balancer-controller
 kubectl get deployment -n kube-system aws-load-balancer-controller
 
